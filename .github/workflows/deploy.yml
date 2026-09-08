@@ -34,4 +34,4 @@ jobs:
             sudo docker build -t lms-frontend .
             sudo docker stop frontend-container || true
             sudo docker rm frontend-container || true
-            sudo docker run -d --name frontend-container -p 80:3000 lms-frontend
+            sudo docker run -d --name frontend-container -p 3000:3000 lms-frontend
