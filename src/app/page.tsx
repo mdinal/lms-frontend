@@ -18,6 +18,7 @@ export default function Home() {
         </div>
         <div className={styles.navLinks}>
           <Link href="/courses" className={styles.navItem}>Courses</Link>
+          <Link href="/live-classes" className={styles.navItem}>Live Classes</Link>
           <Link href="/about" className={styles.navItem}>About Us</Link>
           <div className={styles.navDivider}></div>
           <Link href="/login" className={styles.loginBtn}>Sign In</Link>
