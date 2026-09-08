@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import api from '@/lib/api';
 import styles from './live-classes.module.css';
 
 export default function LiveClasses() {
@@ -13,25 +14,13 @@ export default function LiveClasses() {
     setError('');
     
     try {
-      // Point to our new Spring Boot backend endpoint
-      // Using relative path if proxy is configured, or absolute URL
-      const response = await fetch('https://api.cambridgesuccesscentre.com/api/zoom/meetings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          topic: 'Live Cambridge Success Centre Class',
-          duration: 60
-        })
+      // Use the configured api instance which automatically attaches the JWT token
+      const response = await api.post('/api/zoom/meetings', {
+        topic: 'Live Cambridge Success Centre Class',
+        duration: 60
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to create meeting');
-      }
-
-      const data = await response.json();
-      setMeeting(data);
+      setMeeting(response.data);
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
