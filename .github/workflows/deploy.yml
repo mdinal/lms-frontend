@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "."
-          target: "~/lms-frontend"
+          target: "~/frontend"
           strip_components: 0
           rm: true
 
@@ -30,7 +30,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/lms-frontend
+            cd ~/frontend
             sudo docker build -t lms-frontend .
             sudo docker stop frontend-container || true
             sudo docker rm frontend-container || true
