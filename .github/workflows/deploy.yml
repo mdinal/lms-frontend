@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/frontend
-            sudo docker build -t lms-frontend .
+            sudo docker build --build-arg NEXT_PUBLIC_API_URL=https://api.cambridgesuccesscentre.com -t lms-frontend .
             sudo docker stop frontend-container || true
             sudo docker rm frontend-container || true
             sudo docker run -d --name frontend-container -p 3000:3000 lms-frontend
