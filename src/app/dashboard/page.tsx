@@ -59,7 +59,9 @@ export default function StudentDashboard() {
                   <div className={styles.courseInfo}>
                     <h3>{course.title}</h3>
                     <p>{course.description}</p>
-                    <button className={styles.watchBtn}>View Course</button>
+                    <Link href={`/dashboard/courses/${course.id}`} className={styles.watchBtn} style={{ textDecoration: "none", textAlign: "center", display: "inline-block" }}>
+                      View Course &rarr;
+                    </Link>
                   </div>
                 </div>
               ))

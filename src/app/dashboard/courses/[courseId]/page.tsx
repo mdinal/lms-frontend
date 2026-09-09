@@ -1,24 +1,38 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Link from "next/link";
 import Hls from "hls.js";
 import ProtectedRoute from "@/components/ProtectedRoute";
 
-export default function CoursePlayer({ params }: { params: { courseId: string } }) {
+export default function CoursePlayer({ params }: { params: Promise<{ courseId: string }> }) {
+  const resolvedParams = use(params);
+  const courseId = resolvedParams.courseId;
+
   const [courseData, setCourseData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeLesson, setActiveLesson] = useState<any>(null);
   const [videoUrl, setVideoUrl] = useState("");
+  const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
+  const [progressPercentage, setProgressPercentage] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const router = useRouter();
 
+  const fetchProgress = () => {
+    api.get(`/api/progress/course/${courseId}`)
+      .then(res => {
+        setCompletedLessonIds(res.data.completedLessonIds || []);
+        setProgressPercentage(res.data.progressPercentage || 0);
+      })
+      .catch(err => console.error("Could not load progress", err));
+  };
+
   useEffect(() => {
     // Fetch course details and syllabus
-    api.get(`/api/courses/${params.courseId}/details`)
+    api.get(`/api/courses/${courseId}/details`)
       .then(res => {
         setCourseData(res.data);
         if (res.data.syllabus && res.data.syllabus.length > 0) {
@@ -31,25 +45,28 @@ export default function CoursePlayer({ params }: { params: { courseId: string } 
         setError("Failed to load course. You may not be enrolled.");
         setLoading(false);
       });
-  }, [params.courseId]);
+
+    fetchProgress();
+  }, [courseId]);
 
   useEffect(() => {
-    // When active lesson changes, fetch stream or prep zoom
     if (!activeLesson) return;
 
-    if (activeLesson.type === "VIDEO") {
+    if (activeLesson.type === "VIDEO" && activeLesson.videoS3Key) {
       api.get(`/api/lessons/${activeLesson.id}/stream`)
         .then(res => {
           setVideoUrl(res.data.streamUrl);
         })
-        .catch(err => console.error("Failed to load video stream"));
+        .catch(err => {
+          console.error("Failed to load video stream", err);
+          setVideoUrl("");
+        });
     } else {
       setVideoUrl("");
     }
   }, [activeLesson]);
 
   useEffect(() => {
-    // Initialize HLS.js if videoUrl is present
     if (videoUrl && videoRef.current) {
       const video = videoRef.current;
       
@@ -57,22 +74,31 @@ export default function CoursePlayer({ params }: { params: { courseId: string } 
         const hls = new Hls();
         hls.loadSource(videoUrl);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          // Optional: video.play();
-        });
-        
         return () => hls.destroy();
-      } 
-      // Fallback for Safari which supports HLS natively
-      else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = videoUrl;
       }
     }
   }, [videoUrl]);
 
+  const toggleLessonCompletion = async () => {
+    if (!activeLesson) return;
+    const isCompleted = completedLessonIds.includes(activeLesson.id);
+    try {
+      await api.post(`/api/progress/lesson/${activeLesson.id}`, {
+        isCompleted: !isCompleted
+      });
+      fetchProgress();
+    } catch (err) {
+      console.error("Failed to update progress", err);
+    }
+  };
+
   if (loading) return <div style={{ padding: "4rem", textAlign: "center", color: "#1a365d" }}>Loading Learning Portal...</div>;
   if (error) return <div style={{ padding: "4rem", textAlign: "center", color: "#b91c1c" }}>{error}</div>;
   if (!courseData) return <div style={{ padding: "4rem", textAlign: "center", color: "#1a365d" }}>Course not found.</div>;
+
+  const isCurrentLessonCompleted = activeLesson && completedLessonIds.includes(activeLesson.id);
 
   return (
     <ProtectedRoute>
@@ -89,27 +115,48 @@ export default function CoursePlayer({ params }: { params: { courseId: string } 
               </Link>
               <h1 style={{ fontSize: "1.25rem", fontWeight: 600, margin: 0 }}>{courseData.title}</h1>
             </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "0.875rem" }}>
+              <span style={{ color: "#cbd5e1" }}>Course Progress:</span>
+              <div style={{ width: "100px", height: "8px", background: "rgba(255,255,255,0.2)", borderRadius: "99px", overflow: "hidden" }}>
+                <div style={{ width: `${progressPercentage}%`, height: "100%", background: "#10b981", transition: "width 0.3s" }}></div>
+              </div>
+              <span style={{ fontWeight: 700, color: "#10b981" }}>{progressPercentage}%</span>
+            </div>
           </div>
 
           {/* Player Container */}
           <div style={{ flex: "1", backgroundColor: "black", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
             {activeLesson?.type === "VIDEO" ? (
-              <video 
-                ref={videoRef}
-                controls
-                style={{ width: "100%", height: "100%", maxHeight: "100%", objectFit: "contain" }}
-              />
+              videoUrl ? (
+                <video 
+                  ref={videoRef}
+                  controls
+                  style={{ width: "100%", height: "100%", maxHeight: "100%", objectFit: "contain" }}
+                />
+              ) : (
+                <div style={{ textAlign: "center", color: "#94a3b8", padding: "2rem" }}>
+                  <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>⏳</div>
+                  <h3>Video Processing</h3>
+                  <p>This lecture is either currently transcoding or pending upload.</p>
+                </div>
+              )
             ) : activeLesson?.type === "LIVE_CLASS" ? (
               <div style={{ textAlign: "center", color: "white", padding: "4rem" }}>
                 <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>📹</div>
                 <h2 style={{ fontSize: "2rem", marginBottom: "1rem" }}>Live Session: {activeLesson.title}</h2>
                 <p style={{ color: "#94a3b8", marginBottom: "2rem" }}>Join your instructor for the interactive live class.</p>
-                <button 
-                  onClick={() => alert("Fetching Zoom Join URL... (In a real app, this opens the Zoom link)")}
-                  style={{ background: "#2D8CFF", color: "white", border: "none", padding: "1rem 2rem", borderRadius: "8px", fontSize: "1.1rem", fontWeight: 700, cursor: "pointer" }}
-                >
-                  Join Live Class Now
-                </button>
+                {activeLesson.zoomJoinUrl ? (
+                  <a 
+                    href={activeLesson.zoomJoinUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ display: "inline-block", background: "#2D8CFF", color: "white", padding: "1rem 2rem", borderRadius: "8px", fontSize: "1.1rem", fontWeight: 700, textDecoration: "none", boxShadow: "0 10px 20px rgba(45, 140, 255, 0.3)" }}
+                  >
+                    Join Live Class on Zoom &rarr;
+                  </a>
+                ) : (
+                  <p style={{ color: "#f59e0b" }}>Meeting link has not been generated by the instructor yet.</p>
+                )}
               </div>
             ) : (
               <div style={{ color: "white" }}>Select a lesson to begin.</div>
@@ -117,9 +164,30 @@ export default function CoursePlayer({ params }: { params: { courseId: string } 
           </div>
 
           {/* Lesson Info Footer */}
-          <div style={{ background: "white", padding: "2rem", borderTop: "1px solid #e2e8f0" }}>
-            <h2 style={{ fontSize: "1.5rem", color: "#1e293b", fontWeight: 700, margin: "0 0 0.5rem 0" }}>{activeLesson?.title}</h2>
-            <p style={{ color: "#64748b", margin: 0 }}>Instructor: {courseData.tutorName}</p>
+          <div style={{ background: "white", padding: "1.5rem 2rem", borderTop: "1px solid #e2e8f0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <h2 style={{ fontSize: "1.25rem", color: "#1e293b", fontWeight: 700, margin: "0 0 0.25rem 0" }}>{activeLesson?.title}</h2>
+              <p style={{ color: "#64748b", margin: 0, fontSize: "0.875rem" }}>Instructor: {courseData.tutorName}</p>
+            </div>
+            {activeLesson && (
+              <button 
+                onClick={toggleLessonCompletion}
+                style={{
+                  padding: "0.75rem 1.5rem",
+                  borderRadius: "8px",
+                  border: isCurrentLessonCompleted ? "1px solid #10b981" : "1px solid #cbd5e1",
+                  background: isCurrentLessonCompleted ? "#ecfdf5" : "white",
+                  color: isCurrentLessonCompleted ? "#065f46" : "#475569",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem"
+                }}
+              >
+                <span>{isCurrentLessonCompleted ? "✓ Completed" : "○ Mark as Completed"}</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -131,33 +199,45 @@ export default function CoursePlayer({ params }: { params: { courseId: string } 
           </div>
           
           <div style={{ overflowY: "auto", flex: "1" }}>
-            {courseData.syllabus?.map((lesson: any, idx: number) => (
-              <div 
-                key={lesson.id}
-                onClick={() => setActiveLesson(lesson)}
-                style={{ 
-                  padding: "1.25rem 1.5rem", 
-                  borderBottom: "1px solid #f1f5f9", 
-                  cursor: "pointer",
-                  backgroundColor: activeLesson?.id === lesson.id ? "#eff6ff" : "white",
-                  borderLeft: activeLesson?.id === lesson.id ? "4px solid #3b82f6" : "4px solid transparent",
-                  transition: "background 0.2s"
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.25rem" }}>
-                  <span style={{ color: lesson.type === "VIDEO" ? "#64748b" : "#2D8CFF", fontSize: "1.1rem" }}>
-                    {lesson.type === "VIDEO" ? "▶️" : "📹"}
-                  </span>
-                  <h4 style={{ margin: 0, fontSize: "0.95rem", color: activeLesson?.id === lesson.id ? "#1d4ed8" : "#334155", fontWeight: activeLesson?.id === lesson.id ? 700 : 500 }}>
-                    {lesson.title}
-                  </h4>
+            {courseData.syllabus?.map((lesson: any) => {
+              const isCompleted = completedLessonIds.includes(lesson.id);
+              const isActive = activeLesson?.id === lesson.id;
+
+              return (
+                <div 
+                  key={lesson.id}
+                  onClick={() => setActiveLesson(lesson)}
+                  style={{ 
+                    padding: "1.25rem 1.5rem", 
+                    borderBottom: "1px solid #f1f5f9", 
+                    cursor: "pointer",
+                    backgroundColor: isActive ? "#eff6ff" : "white",
+                    borderLeft: isActive ? "4px solid #3b82f6" : "4px solid transparent",
+                    transition: "background 0.2s"
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.25rem" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                      <span style={{ color: lesson.type === "VIDEO" ? "#64748b" : "#2D8CFF", fontSize: "1.1rem" }}>
+                        {lesson.type === "VIDEO" ? "▶️" : "📹"}
+                      </span>
+                      <h4 style={{ margin: 0, fontSize: "0.95rem", color: isActive ? "#1d4ed8" : "#334155", fontWeight: isActive ? 700 : 500 }}>
+                        {lesson.title}
+                      </h4>
+                    </div>
+                    {isCompleted && (
+                      <span style={{ color: "#10b981", fontSize: "1rem", fontWeight: "bold" }}>✓</span>
+                    )}
+                  </div>
+                  <div style={{ paddingLeft: "2.1rem", fontSize: "0.8rem", color: "#94a3b8", display: "flex", justifyContent: "space-between" }}>
+                    <span>{lesson.type === "VIDEO" ? "Recorded Lecture" : "Live Class"}</span>
+                    {lesson.scheduledAt && (
+                      <span>{new Date(lesson.scheduledAt).toLocaleDateString()}</span>
+                    )}
+                  </div>
                 </div>
-                <div style={{ paddingLeft: "2.1rem", fontSize: "0.8rem", color: "#94a3b8", display: "flex", justifyContent: "space-between" }}>
-                  <span>{lesson.type === "VIDEO" ? "Video" : "Live Session"}</span>
-                  <span>{lesson.duration}</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

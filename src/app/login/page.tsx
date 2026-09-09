@@ -34,9 +34,14 @@ export default function LoginPage() {
         password: password,
       });
       login(response.data.token);
-      router.push("/dashboard");
+      const role = response.data.role;
+      if (role === "ADMIN" || role === "TUTOR") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Invalid credentials");
+      setError(err.response?.data?.message || err.response?.data || "Invalid credentials");
     }
   };
 

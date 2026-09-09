@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import api from "@/lib/api";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 
-export default function CheckoutPage({ params }: { params: { courseId: string } }) {
+export default function CheckoutPage({ params }: { params: Promise<{ courseId: string }> }) {
+  const resolvedParams = use(params);
+  const courseId = resolvedParams.courseId;
   const [course, setCourse] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [processing, setProcessing] = useState(false);
@@ -24,7 +26,7 @@ export default function CheckoutPage({ params }: { params: { courseId: string } 
     // Fetch course details to show the price
     api.get("/api/courses")
       .then(res => {
-        const found = res.data.find((c: any) => c.id === params.courseId);
+        const found = res.data.find((c: any) => c.id === courseId);
         setCourse(found);
         setLoading(false);
       })
@@ -32,7 +34,7 @@ export default function CheckoutPage({ params }: { params: { courseId: string } 
         console.error(err);
         setLoading(false);
       });
-  }, [params.courseId]);
+  }, [courseId]);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,7 +48,7 @@ export default function CheckoutPage({ params }: { params: { courseId: string } 
 
     try {
       const res = await api.post("/api/payments/checkout", {
-        courseId: params.courseId
+        courseId: courseId
       });
       // Redirect to dashboard on success
       router.push("/dashboard");
