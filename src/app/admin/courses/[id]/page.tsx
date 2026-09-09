@@ -123,6 +123,23 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
     }
   };
 
+  const handleAttachRecordingUrl = async (lessonId: string) => {
+    const url = prompt("Enter Zoom Cloud Recording MP4 URL or S3 Key:");
+    if (!url || !url.trim()) return;
+
+    try {
+      setStatusMessage("Attaching recording...");
+      const isS3Key = !url.startsWith("http://") && !url.startsWith("https://");
+      const payload = isS3Key ? { videoS3Key: url.trim() } : { recordingUrl: url.trim() };
+      await api.post(`/api/lessons/${lessonId}/attach-recording`, payload);
+      setStatusMessage("Recording attached successfully!");
+      fetchCourseAndLessons();
+    } catch (err: any) {
+      console.error(err);
+      setStatusMessage(err.response?.data?.message || err.response?.data || "Failed to attach recording.");
+    }
+  };
+
   if (loading) return <div style={{ padding: "3rem" }}>Loading course curriculum...</div>;
 
   return (
@@ -316,13 +333,65 @@ export default function CourseDetail({ params }: { params: Promise<{ id: string 
                     </td>
                     <td style={{ padding: "1.25rem 1.5rem" }}>
                       {isLive ? (
-                        <a href={lesson.zoomJoinUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#2D8CFF", textDecoration: "none", fontWeight: 600, fontSize: "0.875rem" }}>
-                          Join Meeting ({lesson.zoomMeetingId}) &rarr;
-                        </a>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                          <a href={lesson.zoomJoinUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#2D8CFF", textDecoration: "none", fontWeight: 600, fontSize: "0.875rem" }}>
+                            Join Meeting ({lesson.zoomMeetingId}) &rarr;
+                          </a>
+                          {lesson.videoS3Key ? (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <span style={{ color: "#10b981", fontSize: "0.8125rem", fontWeight: 600 }}>
+                                ✓ Recording Ready
+                              </span>
+                              <label style={{ cursor: "pointer", color: "#64748b", fontSize: "0.75rem", textDecoration: "underline" }}>
+                                {isUploading ? "Replacing..." : "Replace File"}
+                                <input 
+                                  type="file" 
+                                  accept="video/*" 
+                                  style={{ display: "none" }} 
+                                  onChange={(e) => handleUploadVideo(lesson.id, e)}
+                                  disabled={isUploading}
+                                />
+                              </label>
+                            </div>
+                          ) : (
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                              <label style={{ cursor: "pointer", color: "#0d6efd", fontSize: "0.8125rem", fontWeight: 600 }}>
+                                {isUploading ? "Uploading..." : "📹 + Upload Recording"}
+                                <input 
+                                  type="file" 
+                                  accept="video/*" 
+                                  style={{ display: "none" }} 
+                                  onChange={(e) => handleUploadVideo(lesson.id, e)}
+                                  disabled={isUploading}
+                                />
+                              </label>
+                              <span style={{ color: "#cbd5e1" }}>|</span>
+                              <button
+                                type="button"
+                                onClick={() => handleAttachRecordingUrl(lesson.id)}
+                                style={{ background: "none", border: "none", padding: 0, color: "#64748b", fontSize: "0.8125rem", cursor: "pointer", textDecoration: "underline" }}
+                              >
+                                Link URL
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       ) : lesson.videoS3Key ? (
-                        <span style={{ color: "#10b981", fontSize: "0.875rem", fontWeight: 600 }}>
-                          ✓ HLS Ready
-                        </span>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                          <span style={{ color: "#10b981", fontSize: "0.875rem", fontWeight: 600 }}>
+                            ✓ HLS Ready
+                          </span>
+                          <label style={{ cursor: "pointer", color: "#64748b", fontSize: "0.75rem", textDecoration: "underline" }}>
+                            {isUploading ? "Replacing..." : "Replace"}
+                            <input 
+                              type="file" 
+                              accept="video/*" 
+                              style={{ display: "none" }} 
+                              onChange={(e) => handleUploadVideo(lesson.id, e)}
+                              disabled={isUploading}
+                            />
+                          </label>
+                        </div>
                       ) : (
                         <label style={{ cursor: "pointer", color: "#0d6efd", fontSize: "0.875rem", fontWeight: 600 }}>
                           {isUploading ? "Uploading..." : "+ Upload Video"}
