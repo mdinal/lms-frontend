@@ -42,7 +42,8 @@ export default function CoursePlayer({ params }: { params: Promise<{ courseId: s
       })
       .catch(err => {
         console.error(err);
-        setError("Failed to load course. You may not be enrolled.");
+        const msg = err.response?.data?.message || (typeof err.response?.data === 'string' ? err.response?.data : null);
+        setError(msg || "Failed to load course. You may not be enrolled.");
         setLoading(false);
       });
 
