@@ -135,6 +135,7 @@ export default function CoursesPage() {
             <Link href="/help">Help Center</Link>
             <Link href="/terms">Terms of Service</Link>
             <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/return-policy">Return & Refund Policy</Link>
           </div>
         </div>
         <div className={mainStyles.footerBottom}>

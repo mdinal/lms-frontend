@@ -18,7 +18,9 @@ export default function CoursePlayer({ params }: { params: Promise<{ courseId: s
   const [videoUrl, setVideoUrl] = useState("");
   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>([]);
   const [progressPercentage, setProgressPercentage] = useState<number>(0);
+  const [lessonProgressMap, setLessonProgressMap] = useState<Record<string, any>>({});
   const videoRef = useRef<HTMLVideoElement>(null);
+  const lastHeartbeatTimeRef = useRef<number>(0);
   const router = useRouter();
 
   const fetchProgress = () => {
@@ -26,8 +28,54 @@ export default function CoursePlayer({ params }: { params: Promise<{ courseId: s
       .then(res => {
         setCompletedLessonIds(res.data.completedLessonIds || []);
         setProgressPercentage(res.data.progressPercentage || 0);
+        setLessonProgressMap(res.data.lessonProgress || {});
       })
       .catch(err => console.error("Could not load progress", err));
+  };
+
+  const handleLoadedMetadata = () => {
+    if (activeLesson && videoRef.current) {
+      const saved = lessonProgressMap[activeLesson.id];
+      const savedSeconds = saved?.lastPositionSeconds || 0;
+      if (savedSeconds > 5 && videoRef.current.duration && savedSeconds < (videoRef.current.duration - 5)) {
+        videoRef.current.currentTime = savedSeconds;
+      }
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (!activeLesson || !videoRef.current) return;
+    const currentTime = Math.floor(videoRef.current.currentTime);
+    const now = Date.now();
+
+    // Heartbeat: save video playback position every 10 seconds
+    if (now - lastHeartbeatTimeRef.current >= 10000 && currentTime > 0) {
+      lastHeartbeatTimeRef.current = now;
+      api.post(`/api/progress/lesson/${activeLesson.id}`, {
+        lastPositionSeconds: currentTime
+      }).then(() => {
+        setLessonProgressMap(prev => ({
+          ...prev,
+          [activeLesson.id]: {
+            ...(prev[activeLesson.id] || {}),
+            lastPositionSeconds: currentTime
+          }
+        }));
+      }).catch(e => console.error("Failed to save playback progress", e));
+    }
+  };
+
+  const handleVideoEnded = async () => {
+    if (!activeLesson) return;
+    try {
+      await api.post(`/api/progress/lesson/${activeLesson.id}`, {
+        isCompleted: true,
+        lastPositionSeconds: Math.floor(videoRef.current?.duration || 0)
+      });
+      fetchProgress();
+    } catch (err) {
+      console.error("Failed to auto-complete lesson", err);
+    }
   };
 
   useEffect(() => {
@@ -156,6 +204,9 @@ export default function CoursePlayer({ params }: { params: Promise<{ courseId: s
                   <video 
                     ref={videoRef}
                     controls
+                    onLoadedMetadata={handleLoadedMetadata}
+                    onTimeUpdate={handleTimeUpdate}
+                    onEnded={handleVideoEnded}
                     style={{ width: "100%", height: "100%", maxHeight: "100%", objectFit: "contain" }}
                   />
                 </div>
@@ -285,9 +336,15 @@ export default function CoursePlayer({ params }: { params: Promise<{ courseId: s
                         {lesson.title}
                       </h4>
                     </div>
-                    {isCompleted && (
-                      <span style={{ color: "#10b981", fontSize: "1rem", fontWeight: "bold" }}>✓</span>
-                    )}
+                    {isCompleted ? (
+                      <span style={{ color: "#10b981", fontSize: "0.75rem", fontWeight: 700, background: "#ecfdf5", padding: "0.2rem 0.6rem", borderRadius: "99px", border: "1px solid #a7f3d0" }}>
+                        ✓ Done
+                      </span>
+                    ) : (lessonProgressMap[lesson.id]?.lastPositionSeconds > 5) ? (
+                      <span style={{ color: "#b45309", fontSize: "0.75rem", fontWeight: 600, background: "#fef3c7", padding: "0.2rem 0.55rem", borderRadius: "99px", border: "1px solid #fde68a" }}>
+                        {Math.floor(lessonProgressMap[lesson.id].lastPositionSeconds / 60)}m watched
+                      </span>
+                    ) : null}
                   </div>
                   <div style={{ paddingLeft: "2.1rem", fontSize: "0.8rem", color: "#94a3b8", display: "flex", justifyContent: "space-between" }}>
                     <span>{isLive ? (hasRec ? "Recorded Live Class" : "Live Class") : "Recorded Lecture"}</span>

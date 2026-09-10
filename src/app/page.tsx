@@ -654,6 +654,7 @@ export default function Home() {
             <Link href="/help">Help & Contact</Link>
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
+            <Link href="/return-policy">Return & Refund Policy</Link>
           </div>
 
         </div>

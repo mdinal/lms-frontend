@@ -4,7 +4,7 @@ import styles from "../page.module.css";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function PrivacyPage() {
+export default function ReturnPolicyPage() {
   return (
     <main className={styles.main}>
       {/* Ambient Lighting Background */}
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem", color: "#94a3b8", marginBottom: "1.5rem" }}>
           <Link href="/" style={{ color: "#94a3b8", textDecoration: "none" }}>Home</Link>
           <span>/</span>
-          <span style={{ color: "#fbbf24" }}>Privacy Policy</span>
+          <span style={{ color: "#fbbf24" }}>Return &amp; Refund Policy</span>
         </div>
 
         {/* Policy Switcher Tabs */}
@@ -77,21 +77,8 @@ export default function PrivacyPage() {
           >
             Terms &amp; Conditions
           </Link>
-          <span
-            style={{
-              padding: "0.6rem 1.25rem",
-              borderRadius: "99px",
-              background: "rgba(212, 175, 55, 0.15)",
-              border: "1px solid rgba(212, 175, 55, 0.4)",
-              color: "#fbbf24",
-              fontSize: "0.875rem",
-              fontWeight: 600,
-            }}
-          >
-            Privacy Policy
-          </span>
           <Link
-            href="/return-policy"
+            href="/privacy"
             style={{
               padding: "0.6rem 1.25rem",
               borderRadius: "99px",
@@ -104,8 +91,21 @@ export default function PrivacyPage() {
               transition: "all 0.2s ease",
             }}
           >
-            Return &amp; Refund Policy
+            Privacy Policy
           </Link>
+          <span
+            style={{
+              padding: "0.6rem 1.25rem",
+              borderRadius: "99px",
+              background: "rgba(212, 175, 55, 0.15)",
+              border: "1px solid rgba(212, 175, 55, 0.4)",
+              color: "#fbbf24",
+              fontSize: "0.875rem",
+              fontWeight: 600,
+            }}
+          >
+            Return &amp; Refund Policy
+          </span>
         </div>
 
         {/* Header Section */}
@@ -128,13 +128,14 @@ export default function PrivacyPage() {
             Official Merchant Policy
           </span>
           <h1 style={{ fontSize: "2.75rem", fontWeight: 800, color: "#ffffff", marginBottom: "1rem", letterSpacing: "-0.02em" }}>
-            Privacy Policy &amp; Data Protection
+            Return, Refund &amp; Cancellation Policy
           </h1>
           <p style={{ color: "#94a3b8", fontSize: "1rem", lineHeight: 1.6, maxWidth: "800px" }}>
             Effective Date: September 1, 2026 &bull; Last Revised: September 2026
           </p>
           <p style={{ color: "#cbd5e1", fontSize: "1.05rem", lineHeight: 1.7, marginTop: "0.75rem", maxWidth: "850px" }}>
-            <strong>Cambridge Success Centre</strong> (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) operates the digital educational platform located at <Link href="https://cambridgesuccesscentre.com" style={{ color: "#60a5fa" }}>https://cambridgesuccesscentre.com</Link>. We are committed to safeguarding your privacy and ensuring the security of your personal and transactional information.
+            At <strong>Cambridge Success Centre</strong> (accessible at <Link href="https://cambridgesuccesscentre.com" style={{ color: "#60a5fa" }}>https://cambridgesuccesscentre.com</Link>),
+            we strive to provide an outstanding educational experience. We recognize that unforeseen circumstances can arise, and we have established this fair, transparent Return and Refund Policy for all courses, live masterclasses, and digital educational services.
           </p>
         </div>
 
@@ -150,18 +151,18 @@ export default function PrivacyPage() {
           <div
             style={{
               background: "rgba(15, 23, 42, 0.75)",
-              border: "1px solid rgba(16, 185, 129, 0.3)",
+              border: "1px solid rgba(212, 175, 55, 0.3)",
               borderRadius: "16px",
               padding: "1.75rem",
               backdropFilter: "blur(12px)",
             }}
           >
-            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🛡️</div>
+            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>⏱️</div>
             <h3 style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-              Zero Card Data Storage
+              7-Day Money-Back Guarantee
             </h3>
             <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.6 }}>
-              All financial transactions are handled exclusively via PCI-DSS compliant payment gateways (PayHere). We never store your full card numbers, CVVs, or sensitive credentials on our servers.
+              Full 100% refund available on self-paced on-demand courses within 7 days of purchase if less than 25% of course lessons have been viewed.
             </p>
           </div>
 
@@ -174,30 +175,30 @@ export default function PrivacyPage() {
               backdropFilter: "blur(12px)",
             }}
           >
-            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🔐</div>
+            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>⚡</div>
             <h3 style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-              256-Bit TLS Encryption
+              5-7 Day Fast Processing
             </h3>
             <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.6 }}>
-              All data transmitted between your browser and our platform is encrypted in transit via robust SSL/TLS protocols and protected in cloud storage with strict access controls.
+              Approved refunds are credited directly back to your original payment method (Credit/Debit Card or Bank Transfer via PayHere / payment gateway).
             </p>
           </div>
 
           <div
             style={{
               background: "rgba(15, 23, 42, 0.75)",
-              border: "1px solid rgba(212, 175, 55, 0.3)",
+              border: "1px solid rgba(16, 185, 129, 0.3)",
               borderRadius: "16px",
               padding: "1.75rem",
               backdropFilter: "blur(12px)",
             }}
           >
-            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🚫</div>
+            <div style={{ fontSize: "2rem", marginBottom: "0.75rem" }}>🎓</div>
             <h3 style={{ color: "#ffffff", fontSize: "1.15rem", fontWeight: 700, marginBottom: "0.5rem" }}>
-              Strict Zero-Sale Policy
+              Pre-Batch Live Class Cancellation
             </h3>
             <p style={{ color: "#94a3b8", fontSize: "0.9rem", lineHeight: 1.6 }}>
-              We never sell, rent, or trade student personal information or academic records to third-party advertisers, marketing agencies, or data brokers.
+              Cancel interactive live Zoom masterclasses up to 48 hours before the cohort begins for a full 100% refund or free transfer to a future cohort.
             </p>
           </div>
         </div>
@@ -218,28 +219,14 @@ export default function PrivacyPage() {
           {/* Section 1 */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>1.</span> Information We Collect
+              <span style={{ color: "#fbbf24" }}>1.</span> Scope &amp; Purpose of this Policy
             </h2>
             <p style={{ marginBottom: "1rem" }}>
-              We collect information to provide collegiate-level educational experiences, administer student enrollments, and process lawful transactions:
+              This Return, Refund, and Cancellation Policy applies to all purchases made on Cambridge Success Centre platform (<Link href="https://cambridgesuccesscentre.com" style={{ color: "#60a5fa" }}>https://cambridgesuccesscentre.com</Link>), including self-paced courses, live Zoom masterclasses, collegiate admissions clinics, and digital examination study archives.
             </p>
-            <ul style={{ paddingLeft: "1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <li>
-                <strong>Personal Identification Information:</strong> Full name, email address, contact telephone number, billing address, and educational level provided during account registration and course checkout.
-              </li>
-              <li>
-                <strong>Account Credentials:</strong> Usernames and securely hashed passwords (using cryptographic bcrypt hashing) used for portal authentication.
-              </li>
-              <li>
-                <strong>Transaction &amp; Order Information:</strong> Course purchase history, transaction references (e.g., PAY_XXXXXXXX), amounts paid, currency, timestamp, and gateway payment method used.
-              </li>
-              <li>
-                <strong>Academic &amp; Learning Records:</strong> Course progress metrics, quiz results, live class attendance records, and submitted assignment diagnostics.
-              </li>
-              <li>
-                <strong>Technical &amp; Telemetry Data:</strong> IP address, browser type, operating system, and streaming telemetry used solely to optimize high-definition HLS video delivery and prevent unauthorized account sharing.
-              </li>
-            </ul>
+            <p>
+              By enrolling in any program or submitting payment through our authorized payment processors (including PayHere), you acknowledge that you have read, understood, and agreed to be bound by the terms outlined below.
+            </p>
           </section>
 
           <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
@@ -247,19 +234,61 @@ export default function PrivacyPage() {
           {/* Section 2 */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>2.</span> How We Use Your Information
+              <span style={{ color: "#fbbf24" }}>2.</span> Refund Eligibility by Service Type
             </h2>
-            <p style={{ marginBottom: "1rem" }}>
-              We utilize collected information strictly for operational and educational purposes:
-            </p>
-            <ul style={{ paddingLeft: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <li>To create and manage your student portal account and course roster enrollments.</li>
-              <li>To process payments, verify billing accuracy, issue invoices, and prevent fraudulent transactions.</li>
-              <li>To deliver live interactive Zoom lectures, seminar invitations, and on-demand video access.</li>
-              <li>To authenticate your digital Certificate of Academic Achievement upon curriculum completion.</li>
-              <li>To communicate critical announcements, system maintenance alerts, and live schedule updates.</li>
-              <li>To comply with regulatory standards and payment gateway consumer protection requirements.</li>
-            </ul>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginTop: "1.25rem" }}>
+              <div style={{ background: "rgba(255, 255, 255, 0.02)", borderLeft: "3px solid #fbbf24", padding: "1.25rem 1.5rem", borderRadius: "0 8px 8px 0" }}>
+                <h3 style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                  A. Self-Paced Video Courses &amp; Modules
+                </h3>
+                <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.5rem" }}>
+                  We offer a <strong>7-Day Risk-Free Money-Back Guarantee</strong> from the timestamp of enrollment under the following conditions:
+                </p>
+                <ul style={{ paddingLeft: "1.5rem", fontSize: "0.9rem", color: "#94a3b8" }}>
+                  <li>The refund request is submitted within 7 calendar days of initial course payment.</li>
+                  <li>The student has consumed less than 25% of the total video curriculum lessons.</li>
+                  <li>No course completion certificate has been generated or issued.</li>
+                  <li>Course notes or downloadable materials have not been downloaded in bulk.</li>
+                </ul>
+              </div>
+
+              <div style={{ background: "rgba(255, 255, 255, 0.02)", borderLeft: "3px solid #3b82f6", padding: "1.25rem 1.5rem", borderRadius: "0 8px 8px 0" }}>
+                <h3 style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                  B. Live Interactive Zoom Classes &amp; Cohort Batches
+                </h3>
+                <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.5rem" }}>
+                  Due to limited cohort seat capacity and live tutor scheduling:
+                </p>
+                <ul style={{ paddingLeft: "1.5rem", fontSize: "0.9rem", color: "#94a3b8" }}>
+                  <li><strong>Full Refund (100%):</strong> When cancellation is requested at least 48 hours prior to the official batch start date.</li>
+                  <li><strong>Cohort Transfers:</strong> Students may transfer their seat to an upcoming cohort free of charge prior to the commencement of the second live session.</li>
+                  <li><strong>Mid-Cohort Withdrawals:</strong> Once live classes have commenced, pro-rated refunds are evaluated exclusively on documented medical grounds or academic emergencies.</li>
+                </ul>
+              </div>
+
+              <div style={{ background: "rgba(255, 255, 255, 0.02)", borderLeft: "3px solid #a855f7", padding: "1.25rem 1.5rem", borderRadius: "0 8px 8px 0" }}>
+                <h3 style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                  C. 1-on-1 Academic Mentorship &amp; Admissions Clinics
+                </h3>
+                <p style={{ fontSize: "0.95rem", color: "#cbd5e1", marginBottom: "0.5rem" }}>
+                  Individual advisory clinics with faculty members require advance schedule reservation:
+                </p>
+                <ul style={{ paddingLeft: "1.5rem", fontSize: "0.9rem", color: "#94a3b8" }}>
+                  <li>Sessions may be rescheduled without penalty up to 24 hours prior to the scheduled slot.</li>
+                  <li>Cancellations requested with less than 24 hours notice or unannounced absences (&quot;no-shows&quot;) are non-refundable.</li>
+                </ul>
+              </div>
+
+              <div style={{ background: "rgba(255, 255, 255, 0.02)", borderLeft: "3px solid #ef4444", padding: "1.25rem 1.5rem", borderRadius: "0 8px 8px 0" }}>
+                <h3 style={{ color: "#ffffff", fontSize: "1.1rem", fontWeight: 600, marginBottom: "0.5rem" }}>
+                  D. Standalone Digital Study Notes &amp; Past-Paper Mock Grading
+                </h3>
+                <p style={{ fontSize: "0.95rem", color: "#cbd5e1" }}>
+                  Downloadable examination papers, solution packs, and personalized mock marking submissions that have already undergone faculty review cannot be returned or refunded once downloaded or evaluated.
+                </p>
+              </div>
+            </div>
           </section>
 
           <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
@@ -267,18 +296,16 @@ export default function PrivacyPage() {
           {/* Section 3 */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>3.</span> Payment Processing &amp; Financial Security
+              <span style={{ color: "#fbbf24" }}>3.</span> Subscription Cancellation Policy
             </h2>
             <p style={{ marginBottom: "1rem" }}>
-              Payment transactions on Cambridge Success Centre are routed through authorized, Tier-1 PCI-DSS compliant payment gateways, including <strong>PayHere</strong>:
+              If you are enrolled in a recurring subscription plan (e.g., Monthly All-Access Membership):
             </p>
-            <div style={{ background: "rgba(255, 255, 255, 0.03)", borderRadius: "12px", padding: "1.5rem", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
-              <ul style={{ paddingLeft: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem", color: "#cbd5e1" }}>
-                <li>Your credit or debit card details, CVV codes, and banking credentials are entered directly onto encrypted payment gateway interfaces.</li>
-                <li>Our servers receive only a secure token, transaction confirmation reference, and status code. We never touch, process, or store unencrypted financial card data.</li>
-                <li>All payment communications are encrypted with 256-bit TLS (Transport Layer Security) technology.</li>
-              </ul>
-            </div>
+            <ul style={{ paddingLeft: "1.5rem", marginBottom: "1rem" }}>
+              <li>You may cancel your recurring subscription at any time by logging into your Student Dashboard at <Link href="/dashboard" style={{ color: "#60a5fa" }}>https://cambridgesuccesscentre.com/dashboard</Link> or emailing our billing support.</li>
+              <li>Upon cancellation, your subscription will remain active until the conclusion of your current paid billing period, and no further renewal charges will be applied.</li>
+              <li>Past subscription cycles that have already elapsed are non-refundable.</li>
+            </ul>
           </section>
 
           <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
@@ -286,17 +313,27 @@ export default function PrivacyPage() {
           {/* Section 4 */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>4.</span> Third-Party Service Providers
+              <span style={{ color: "#fbbf24" }}>4.</span> Refund Processing &amp; Settlement Timeline
             </h2>
             <p style={{ marginBottom: "1rem" }}>
-              We do not sell or monetize personal data. We share information only with verified third-party infrastructure providers necessary to operate the platform:
+              We ensure all approved refunds are processed expeditiously and transparently:
             </p>
-            <ul style={{ paddingLeft: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <li><strong>Cloud Infrastructure:</strong> Amazon Web Services (AWS) for hosting databases and high-security encrypted storage.</li>
-              <li><strong>Video Streaming:</strong> Content Delivery Networks (CloudFront CDN) for latency-free HLS video playback.</li>
-              <li><strong>Payment Processors:</strong> PayHere / banking partners to process and settle tuition transactions.</li>
-              <li><strong>Virtual Classrooms:</strong> Zoom Video Communications for hosting interactive masterclasses.</li>
-            </ul>
+            <div style={{ background: "rgba(255, 255, 255, 0.03)", borderRadius: "12px", padding: "1.5rem", border: "1px solid rgba(255, 255, 255, 0.06)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+                <div>
+                  <h4 style={{ color: "#ffffff", fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem" }}>Original Payment Method</h4>
+                  <p style={{ color: "#94a3b8", fontSize: "0.875rem" }}>
+                    Refunds are credited directly back to the payment method originally used for the purchase (Credit Card, Debit Card, or Bank account via PayHere gateway).
+                  </p>
+                </div>
+                <div>
+                  <h4 style={{ color: "#ffffff", fontSize: "0.95rem", fontWeight: 600, marginBottom: "0.5rem" }}>Turnaround Time</h4>
+                  <p style={{ color: "#94a3b8", fontSize: "0.875rem" }}>
+                    Once our team confirms approval, the refund is initiated within 24 hours. Depending on your issuing bank, the credit appears in your statement within <strong>5 to 7 business days</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </section>
 
           <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
@@ -304,51 +341,45 @@ export default function PrivacyPage() {
           {/* Section 5 */}
           <section style={{ marginBottom: "2.5rem" }}>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>5.</span> Cookies &amp; Tracking Technologies
+              <span style={{ color: "#fbbf24" }}>5.</span> How to Request a Refund
             </h2>
             <p style={{ marginBottom: "1rem" }}>
-              We use essential session cookies and local storage tokens to keep you securely signed in to the Student Dashboard, remember your lecture playback positions, and protect against Cross-Site Request Forgery (CSRF). You can manage cookie preferences in your browser settings; however, disabling authentication cookies will prevent access to enrolled courses.
+              To submit a refund request, please send an email to our student support team with the following details:
+            </p>
+            <div style={{ background: "rgba(212, 175, 55, 0.05)", border: "1px dashed rgba(212, 175, 55, 0.3)", borderRadius: "12px", padding: "1.5rem", marginBottom: "1rem" }}>
+              <p style={{ color: "#fbbf24", fontWeight: 600, marginBottom: "0.75rem" }}>Email Template for Refund Requests:</p>
+              <p style={{ fontSize: "0.9rem", color: "#e2e8f0", margin: "0.25rem 0" }}><strong>Send to:</strong> support@cambridgesuccesscentre.com</p>
+              <p style={{ fontSize: "0.9rem", color: "#e2e8f0", margin: "0.25rem 0" }}><strong>Subject:</strong> Refund Request - [Your Full Name] - [Course Name]</p>
+              <p style={{ fontSize: "0.9rem", color: "#e2e8f0", margin: "0.25rem 0" }}><strong>Registered Email:</strong> [The email address used during purchase]</p>
+              <p style={{ fontSize: "0.9rem", color: "#e2e8f0", margin: "0.25rem 0" }}><strong>Transaction ID / Reference:</strong> [PAY_XXXXXXXX or Order ID from your receipt]</p>
+              <p style={{ fontSize: "0.9rem", color: "#e2e8f0", margin: "0.25rem 0" }}><strong>Reason for Request:</strong> [Brief explanation to help us improve our curricula]</p>
+            </div>
+            <p style={{ fontSize: "0.95rem", color: "#94a3b8" }}>
+              Our support desk operates Monday through Saturday and will confirm receipt and provide an update within 24 to 48 business hours.
             </p>
           </section>
 
           <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
 
           {/* Section 6 */}
-          <section style={{ marginBottom: "2.5rem" }}>
-            <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>6.</span> Student Rights &amp; Data Controls
-            </h2>
-            <p style={{ marginBottom: "1rem" }}>
-              Depending on applicable jurisdiction, you possess specific data privacy rights:
-            </p>
-            <ul style={{ paddingLeft: "1.5rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-              <li><strong>Right to Access:</strong> You may request a summary of the personal data we hold about you.</li>
-              <li><strong>Right to Rectification:</strong> You may correct inaccurate profile data at any time via your portal settings.</li>
-              <li><strong>Right to Deletion:</strong> You may request permanent deletion of your account and data, subject to legal record retention requirements.</li>
-            </ul>
-          </section>
-
-          <hr style={{ borderColor: "rgba(255, 255, 255, 0.08)", margin: "2rem 0" }} />
-
-          {/* Section 7 */}
           <section>
             <h2 style={{ fontSize: "1.5rem", color: "#ffffff", fontWeight: 700, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "#fbbf24" }}>7.</span> Privacy Inquiries &amp; Contact Information
+              <span style={{ color: "#fbbf24" }}>6.</span> Merchant Support &amp; Billing Inquiries
             </h2>
             <p style={{ marginBottom: "1rem" }}>
-              If you have questions regarding this Privacy Policy or wish to exercise your data rights, please contact our Data Protection Office:
+              If you experience any billing discrepancies, double charges, or difficulties accessing course content, please reach out to our dedicated student finance team before initiating a chargeback with your financial institution:
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", marginTop: "1.5rem" }}>
               <div style={{ background: "rgba(255, 255, 255, 0.03)", padding: "1.25rem", borderRadius: "10px" }}>
-                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>Data Controller</div>
+                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>Merchant Name</div>
                 <div style={{ color: "#ffffff", fontWeight: 600, marginTop: "0.25rem" }}>Cambridge Success Centre</div>
               </div>
               <div style={{ background: "rgba(255, 255, 255, 0.03)", padding: "1.25rem", borderRadius: "10px" }}>
-                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>Privacy Inquiries</div>
-                <div style={{ color: "#60a5fa", fontWeight: 600, marginTop: "0.25rem" }}>privacy@cambridgesuccesscentre.com</div>
+                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>Support Email</div>
+                <div style={{ color: "#60a5fa", fontWeight: 600, marginTop: "0.25rem" }}>support@cambridgesuccesscentre.com</div>
               </div>
               <div style={{ background: "rgba(255, 255, 255, 0.03)", padding: "1.25rem", borderRadius: "10px" }}>
-                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>General Support</div>
+                <div style={{ fontSize: "0.85rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.05em" }}>General Inquiries</div>
                 <div style={{ color: "#60a5fa", fontWeight: 600, marginTop: "0.25rem" }}>info@cambridgesuccesscentre.com</div>
               </div>
               <div style={{ background: "rgba(255, 255, 255, 0.03)", padding: "1.25rem", borderRadius: "10px" }}>
@@ -419,8 +450,8 @@ export default function PrivacyPage() {
             <Link href="/instructors">Faculty &amp; Fellows</Link>
             <Link href="/help">Help &amp; Contact</Link>
             <Link href="/terms">Terms of Service</Link>
-            <Link href="/privacy" style={{ color: "#fbbf24" }}>Privacy Policy</Link>
-            <Link href="/return-policy">Return &amp; Refund Policy</Link>
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/return-policy" style={{ color: "#fbbf24" }}>Return &amp; Refund Policy</Link>
           </div>
         </div>
 
